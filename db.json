@@ -1,0 +1,34 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "Judul 1",
+      "date": "2012-04-21T18:25:43-05:00",
+      "note": "note 1"
+    },
+    {
+      "id": 2,
+      "title": "Judul 2",
+      "date": "2012-04-21T18:25:43-05:00",
+      "note": "note 2"
+    },
+    {
+      "id": 3,
+      "title": "Judul 3",
+      "date": "2012-04-21T18:25:43-05:00",
+      "note": "note 3"
+    },
+    {
+      "id": 4,
+      "title": "Judul 4",
+      "date": "2012-04-21T18:25:43-05:00",
+      "note": "note 4"
+    },
+    {
+      "id": 588679652568,
+      "title": "cba lagi nih ya",
+      "date": "21/8/2022",
+      "note": "coba bang"
+    }
+  ]
+}
