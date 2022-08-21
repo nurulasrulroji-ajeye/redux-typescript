@@ -1,4 +1,4 @@
-import {createSlice , createAsyncThunk, createEntityAdapter} from '@reduxjs/toolkit'
+import {createSlice , createAsyncThunk, createEntityAdapter, PayloadAction} from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '../app/store';
 import { Post, Posts } from '../types';
@@ -35,8 +35,14 @@ export const getTodo = createAsyncThunk("todos/getTodo", async (_, thunkApi) => 
     return res.data;
 });
 
-export const addTodo = createAsyncThunk("todos/addTodo", async (todo: Omit<Post, 'id'>, thunkApi) => {
-    const res = await axios.post<Post>(`${URL}/todos`, todo).catch((err) =>{
+const date = new Date();
+export const addTodo = createAsyncThunk("todos/addTodo", async (todo: Partial<Post>, thunkApi) => {
+    const res = await axios.post<Post>(`${URL}/todos`,{
+        id: Math.floor(Math.random() * Date.now()),
+        title: todo.title,
+        date: date.toLocaleDateString(),
+        note: todo.note
+    }).catch((err) =>{
         thunkApi.rejectWithValue(err);
         throw err
     });
@@ -51,7 +57,19 @@ export const deleteTodo = createAsyncThunk("todos/deleteTodo", async(todoId:numb
         throw err;
     });
     return {data: res.data, todoId};
-})
+});
+
+export const updateTodo = createAsyncThunk("todos/updateTodo", async(todo: Partial<Post>, thunkApi)=>{
+    const res = await axios.patch<Post>(`${URL}/todos/${todo.id}`,{
+        title: todo.title,
+        date: date.toLocaleDateString(),
+        note: todo.note
+    }).catch((err) =>{
+        thunkApi.rejectWithValue(err)
+        throw err;
+    });
+    return res.data;
+});
 
 
 const todoSlice = createSlice({
@@ -102,6 +120,22 @@ const todoSlice = createSlice({
             state.status = 'success bro';
             postsAdapter.removeOne(state, action.payload.todoId);
         })
+        .addCase(updateTodo.pending, (state) => {
+            state.message = '';
+          })
+          .addCase(updateTodo.rejected, (state, action) => {
+            if (action.error.message) {
+              state.message = action.error.message;
+            }
+          })
+          .addCase(updateTodo.fulfilled, (state, action: PayloadAction<Post>) => {
+            state.status = 'idle';
+            const { id, ...updateData } = action.payload;
+            postsAdapter.updateOne(state, {
+              id: id,
+              changes: { ...updateData },
+            });
+          })
     },
 });
 
