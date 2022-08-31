@@ -46,7 +46,7 @@ const AddTodo = () => {
         />
         <div className="w-full flex justify-end">
           <button className="border-2 text-white border-white px-5 py-1 rounded-md shadow-[1px_1px_10px_rgb(250,250,250)] hover:bg-white hover:text-black font-inter font-bold">
-            Add Note
+            Add Notes
           </button>
         </div>
       </form>
